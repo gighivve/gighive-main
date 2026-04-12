@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  
+  --color-primary: #4F46E5; /* Indigo-600 */
+  --color-accent: #6366F1; /* Indigo-500 */
+  --color-dark: #0F172A;
+  
+  /* Theme Variables */
+  --color-background: var(--bg-main);
+  --color-foreground: var(--text-main);
+  --color-muted: var(--bg-alt);
+  --color-border: var(--border-main);
+}
+
+:root {
+  --bg-main: #ffffff;
+  --text-main: #0F172A;
+  --bg-alt: #F8FAFC;
+  --border-main: #F1F5F9;
+}
+
+.dark {
+  --bg-main: #1a1e30;
+  --text-main: #ffffff;
+  --bg-alt: #0a0a0a;
+  --border-main: rgb(49, 49, 49);
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-background text-foreground antialiased transition-colors duration-300;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-background/80 backdrop-blur-md border border-border;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+}

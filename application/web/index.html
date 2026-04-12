@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="application">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">q
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <title>application</title>
+
+  <!--
+    Offline development tweaks:
+    * Fonts are self‑hosted in assets/fonts/ (Roboto and MaterialIcons). This
+      prevents the engine from fetching resources from fonts.googleapis.com/
+      fonts.gstatic.com when the network is unavailable.
+    * CanvasKit files are also served locally from /canvaskit/ rather than the
+      default CDN; ensure you’ve copied `canvaskit.js` and the matching
+      `.wasm` into that directory.
+    * The <style> below provides @font-face rules as a fallback when the
+      runtime attempts to inject external links.
+  -->
+  <style>
+    @font-face {
+      font-family: 'Roboto';
+      src: url('assets/fonts/Roboto-Regular.ttf') format('truetype');
+      font-weight: 400;
+    }
+
+    @font-face {
+      font-family: 'Roboto';
+      src: url('assets/fonts/Roboto-Medium.ttf') format('truetype');
+      font-weight: 500;
+    }
+
+    @font-face {
+      font-family: 'Roboto';
+      src: url('assets/fonts/Roboto-Bold.ttf') format('truetype');
+      font-weight: 700;
+    }
+
+    @font-face {
+      font-family: 'MaterialIcons';
+      src: url('assets/fonts/MaterialIcons-Regular.ttf') format('truetype');
+    }
+  </style>
+
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+  <!-- rewrite any network fetches of the gstatic canvaskit files to local
+       copies. This runs before flutter_bootstrap.js so even the dynamic
+       import inside the bootstrap will be redirected to /canvaskit/. -->
+  <script>
+    (function () {
+      const origFetch = window.fetch.bind(window);
+      window.fetch = function (input, init) {
+        if (typeof input === 'string' && input.startsWith('https://www.gstatic.com/flutter-canvaskit/')) {
+          const parts = input.split('/');
+          const file = parts[parts.length - 1];
+          input = '/canvaskit/' + file;
+        }
+        return origFetch(input, init);
+      };
+    })();
+  </script>
+  <div id="loading" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:sans-serif;">
+    Loading application...
+  </div>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(console.error);
+    }
+  </script>
+</body>
+
+</html>

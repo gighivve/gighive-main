@@ -1,0 +1,47 @@
+model User {
+  id             String  @id @default(uuid())
+  firstName      String
+  middleName     String?
+  lastName       String
+  userName       String  @unique
+  password       String
+  email          String  @unique
+  phone          String  @unique
+  ProfilePicture String?
+
+  latitude  Float?
+  longitude Float?
+  city      String?
+  state     String?
+  region    String?
+
+  referralCode String  @unique
+  referredById String?
+  referredBy   User?   @relation("userReferral", fields: [referredById], references: [id])
+  refferals    User[]  @relation("userReferral")
+
+  role        UserRole  @default(CONSUMER)
+
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  workerprofile WorkerProfile?
+  wallet Wallet?
+}
+
+enum UserRole{
+  ADMIN
+  CONSUMER
+  WORKER
+}
+
+model WorkerProfile {
+  id       String    @id @default(uuid())
+  userId   String    @unique
+  bio      String?
+  rating   Float     @default(0)
+  services Service[]
+
+  user User @relation(fields: [userId], references: [id])
+}

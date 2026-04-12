@@ -1,0 +1,19 @@
+model Service {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  price       Float
+
+  workerId String
+  worker   WorkerProfile @relation(fields: [workerId], references: [id])
+
+  CategoryId String
+  Category   Category @relation(fields: [CategoryId], references: [id])
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  services  Service[]
+  createdAt DateTime  @default(now())
+}

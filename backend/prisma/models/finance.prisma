@@ -1,0 +1,23 @@
+model Wallet {
+  id      String @id @default(uuid())
+  userId  String @unique
+  balance Float  @default(0)
+  user    User   @relation(fields: [userId], references: [id])
+
+  transactions Transactions[]
+}
+
+model Transactions {
+  id        String          @id @default(uuid())
+  amount    Float
+  type      TransactionType
+  walletId  String
+  wallet    Wallet          @relation(fields: [walletId], references: [id])
+  createdAt DateTime        @default(now())
+}
+
+enum TransactionType {
+  REFERRAL_BONUS
+  SERVICE_PAYMENT
+  WITHDRAWAL
+}

@@ -1,0 +1,100 @@
+model Wallet {
+  id      String @id @default(uuid())
+  userId  String @unique
+  balance Float  @default(0)
+  user    User   @relation(fields: [userId], references: [id])
+
+  transactions Transactions[]
+}
+
+model Transactions {
+  id        String          @id @default(uuid())
+  amount    Float
+  type      TransactionType
+  walletId  String
+  wallet    Wallet          @relation(fields: [walletId], references: [id])
+  createdAt DateTime        @default(now())
+}
+
+enum TransactionType {
+  REFERRAL_BONUS
+  SERVICE_PAYMENT
+  WITHDRAWAL
+}
+
+model Service {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  price       Float
+
+  workerId String
+  worker   WorkerProfile @relation(fields: [workerId], references: [id])
+
+  CategoryId String
+  Category   Category @relation(fields: [CategoryId], references: [id])
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  services  Service[]
+  createdAt DateTime  @default(now())
+}
+
+model User {
+  id             String  @id @default(uuid())
+  firstName      String
+  middleName     String?
+  lastName       String
+  userName       String  @unique
+  password       String
+  email          String  @unique
+  phone          String  @unique
+  ProfilePicture String?
+
+  latitude  Float?
+  longitude Float?
+  city      String?
+  state     String?
+  region    String?
+
+  referralCode String  @unique
+  referredById String?
+  referredBy   User?   @relation("userReferral", fields: [referredById], references: [id])
+  refferals    User[]  @relation("userReferral")
+
+  role UserRole @default(CONSUMER)
+
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  workerprofile WorkerProfile?
+  wallet        Wallet?
+}
+
+enum UserRole {
+  ADMIN
+  CONSUMER
+  WORKER
+}
+
+model WorkerProfile {
+  id       String    @id @default(uuid())
+  userId   String    @unique
+  bio      String?
+  rating   Float     @default(0)
+  services Service[]
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
