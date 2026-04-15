@@ -11,15 +11,50 @@ void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isDark = false;
+
+  void toggleTheme() {
+    setState(() {
+      isDark = !isDark;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(fontFamily: "Roboto"),
-      home: SafeArea(child: Layout()),
+      debugShowCheckedModeBanner: false,
+
+      // 👇 LIGHT THEME
+      theme: ThemeData(
+        brightness: Brightness.light,
+        fontFamily: "Roboto",
+        scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      ),
+
+      // 👇 DARK THEME
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        fontFamily: "Roboto",
+        scaffoldBackgroundColor: const Color(0xFF0F172A), // nice dark navy
+      ),
+
+      // 👇 SWITCH CONTROL
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+
+      home: SafeArea(
+        child: Layout(
+          isDark: isDark,
+          toggleTheme: toggleTheme,
+        ),
+      ),
     );
   }
 }

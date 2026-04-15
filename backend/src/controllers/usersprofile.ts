@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { userService } from "../service/user";
+import { userService } from "../service/userProfile";
 import * as jwt from "jsonwebtoken";
 
 export class users {
@@ -14,12 +14,12 @@ export class users {
     }
   };
 
-  // register new account 
+  // register new account
   public Createprofile = async (req: Request, res: Response) => {
     try {
       const userProfile = await this.userServi.createAccount(req.body);
       const token = jwt.sign({ id: userProfile.id }, process.env.JWT_SECRET, { expiresIn: "7d" });
-      res.status(200).json({ message: "welcome to the hive", token,  userProfile });
+      res.status(200).json({ message: "welcome to the hive", token, userProfile });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

@@ -1,5 +1,5 @@
 import { UserDataType } from "../lib/types";
-import { userRepository } from "../repositories/users";
+import { userRepository } from "../repositories/usersProfile";
 import { checkFields } from "../lib/helper";
 import * as bcrypt from "bcrypt";
 import { randomBytes } from "crypto";
@@ -13,10 +13,10 @@ export class userService {
     // check if the user with the req email already
     // throw error (message) if user exist
     const existingUser = await this.userRepo.checkEmail(data.email);
-    const message = "user with email already exist. please try logging in"
+    const message = "user with email already exist. please try logging in";
     if (!!existingUser) throw new Error(message);
 
-    // hash password 
+    // hash password
     const pasword: UserDataType["password"] = data.password;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(pasword, salt);
@@ -29,7 +29,6 @@ export class userService {
     return this.userRepo.create({ ...data, password: hashedPassword, userName }, referralCode);
   }
 
-
   // get users informaion
   async AccountInfomation(data: any) {
     const { id, email } = data;
@@ -37,7 +36,6 @@ export class userService {
     if (!!infos) return infos;
     else throw new Error("invalid user credentials");
   }
-
 
   // update user data
   async updateAccount(id: string, data: Partial<UserDataType>) {
