@@ -23,7 +23,7 @@ class AuthmiddleWare {
   //   authenication for incoming request
   //   verify the user before allowing request go through
   public authenticate = async (req: Request, res: Response, next: NextFunction) => {
-    const authHeader:string = req.headers.authorization;
+    const authHeader:string | undefined = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ message: "user not authenticated" });
     }
@@ -63,5 +63,5 @@ class AuthmiddleWare {
   };
 }
 
-const auth = new AuthmiddleWare(process.env.JWT_SECRET);
+const auth = new AuthmiddleWare(process.env.JWT_SECRET as string);
 export default auth; 

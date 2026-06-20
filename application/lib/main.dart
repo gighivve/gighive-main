@@ -1,13 +1,14 @@
-// ignore_for_file: avoid_web_libraries_in_flutter
-
+import 'package:application/core/color.dart';
 import 'package:application/page.dart';
+import 'package:application/src/web_loader.dart';
 import 'package:flutter/material.dart';
-// ignore: deprecated_member_use
-import 'dart:html' as html;
+import 'package:flutter/services.dart';
 
 void main() {
-  // remove the HTML loading indicator once Flutter starts
-  html.document.getElementById('loading')?.remove();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent
+    ));
+  removeLoadingIndicator();
   runApp(const MyApp());
 }
 
@@ -31,18 +32,28 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
       // 👇 LIGHT THEME
       theme: ThemeData(
         brightness: Brightness.light,
         fontFamily: "Roboto",
-        scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        primaryColor: AppColor.background,
+        scaffoldBackgroundColor: AppColor.background,
+
+        textTheme: ThemeData.light().textTheme.apply(
+          bodyColor: AppColor.primaryText,
+          displayColor: AppColor.primaryText,
+        ),
+        primaryTextTheme: ThemeData.light().textTheme.apply(
+          bodyColor: AppColor.primaryText,
+          displayColor: AppColor.primaryText,
+        ),
       ),
 
       // 👇 DARK THEME
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         fontFamily: "Roboto",
+        primaryColor: AppColor.background,
         scaffoldBackgroundColor: const Color(0xFF0F172A), // nice dark navy
       ),
 
@@ -50,10 +61,7 @@ class _MyAppState extends State<MyApp> {
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
 
       home: SafeArea(
-        child: Layout(
-          isDark: isDark,
-          toggleTheme: toggleTheme,
-        ),
+        child: Layout(isDark: isDark, toggleTheme: toggleTheme),
       ),
     );
   }

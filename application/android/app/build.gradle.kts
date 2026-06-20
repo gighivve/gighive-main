@@ -7,7 +7,8 @@ plugins {
 
 android {
     namespace = "com.example.application"
-    compileSdk = flutter.compileSdkVersion
+    // Use installed Android SDK version to avoid requiring SDK upgrade during local builds
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -25,7 +26,8 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        // Match the installed SDK/platform on this machine
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

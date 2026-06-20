@@ -1,7 +1,7 @@
 import * as express from "express";
 import errorHandler from "./middlewares/errorHandling";
-import workRoute from "./routes/users";
 import prisma from "./config/prisma";
+import userRoute from "./feature/users/routes/users";
 
 export default class App {
   public app: express.Application;
@@ -25,7 +25,7 @@ export default class App {
     this.app.get("/", (req: express.Request, res: express.Response) => {
       res.status(200).json({ message: " application is working perfectly" });
     });
-    this.app.use("/user", workRoute);
+    this.app.use("/user", userRoute);
   }
   private initializeError(): void {
     this.app.use(errorHandler);
