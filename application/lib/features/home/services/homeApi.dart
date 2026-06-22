@@ -10,7 +10,7 @@ Future<List<Map<String, dynamic>>> fetchTransactions() async {
       'category': 'Barbing',
       'amount': 5000.00,
       'type': 'income',
-      'status': 'Completed',
+      'status': 'successful',
       'client': 'John Doe',
     },
     {
@@ -21,7 +21,7 @@ Future<List<Map<String, dynamic>>> fetchTransactions() async {
       'category': 'Cleaning',
       'amount': 8000.00,
       'type': 'income',
-      'status': 'Completed',
+      'status': 'successful',
       'client': 'Sarah A.',
     },
     {
@@ -32,7 +32,7 @@ Future<List<Map<String, dynamic>>> fetchTransactions() async {
       'category': 'Laundry',
       'amount': 3000.00,
       'type': 'income',
-      'status': 'Completed',
+      'status': 'successful',
       'client': 'Michael K.',
     },
     {
@@ -54,7 +54,7 @@ Future<List<Map<String, dynamic>>> fetchTransactions() async {
       'category': 'Repair',
       'amount': 12000.00,
       'type': 'income',
-      'status': 'Completed',
+      'status': 'successful',
       'client': 'David O.',
     },
     {
@@ -68,5 +68,16 @@ Future<List<Map<String, dynamic>>> fetchTransactions() async {
       'status': 'Cancelled',
       'client': 'Unknown',
     },
+  ];
+}
+
+Future<List<Map<String, dynamic>>> getServices() async {
+  return [
+    {"title": "cleaning", "jobs_done":20},
+    {"title": "cooking", "jobs_done":20},
+    {"title": "laundry", "jobs_done":20},
+    {"title": "errand", "jobs_done":20},
+    {"title": "barbing", "jobs_done":20},
+    {"title": "drummer", "jobs_done":20},
   ];
 }

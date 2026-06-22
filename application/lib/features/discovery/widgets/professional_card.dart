@@ -1,10 +1,10 @@
 import 'package:application/core/color.dart';
 import 'package:flutter/material.dart';
 
-class GigCard extends StatelessWidget {
+class ProfessionalCard extends StatelessWidget {
   final Map<String, dynamic> gig;
 
-  const GigCard({super.key, required this.gig});
+  const ProfessionalCard({super.key, required this.gig});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +15,11 @@ class GigCard extends StatelessWidget {
     const amber = Color(0xFFF59E0B);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(color: const Color(0xFFF1F5F9)),
         boxShadow: [
           BoxShadow(
@@ -80,7 +80,7 @@ class GigCard extends StatelessWidget {
                       child: Text(
                         gig["name"],
                         style: const TextStyle(
-                          fontSize: 15,
+                          fontSize: 14,
                           fontWeight: FontWeight.w700,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -181,44 +181,7 @@ class GigCard extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                   color: green,
                 ),
-              ),
-
-              const SizedBox(height: 10),
-
-              /// LIKE
-              // Container(
-              //   padding: const EdgeInsets.all(6),
-              //   decoration: BoxDecoration(
-              //     color: Colors.grey.shade100,
-              //     shape: BoxShape.circle,
-              //   ),
-              //   child: const Icon(
-              //     Icons.favorite_border,
-              //     size: 17,
-              //     color: indigo,
-              //   ),
-              // ),
-              const SizedBox(height: 10),
-
-              /// VIEW BUTTON
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: indigo,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Text(
-                  "View",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+              ),              
             ],
           ),
         ],

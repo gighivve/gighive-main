@@ -28,8 +28,8 @@ class _BalanceCardState extends State<BalanceCard> {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.25),
-            blurRadius: 30,
+            color: Colors.black.withAlpha(50),
+            blurRadius: 20,
             offset: const Offset(0, 15),
           ),
         ],

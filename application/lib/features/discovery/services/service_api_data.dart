@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 Future<List<Map<String, dynamic>>> gigsData() async {
   await Future.delayed(const Duration(seconds: 2));
@@ -36,14 +35,47 @@ Future<List<Map<String, dynamic>>> gigsData() async {
       "image": "https://i.pravatar.cc/150?img=6",
       "tag": "Top Rated",
     },
+    {
+      "name": "Sparkle Cleaning Pro",
+      "service": "Cleaning Services",
+      "price": "₦3,500",
+      "online": true,
+      "rating": "4.7",
+      "reviews": "76",
+      "distance": "1.8 km",
+      "image": "https://i.pravatar.cc/150?img=6",
+      "tag": "Top Rated",
+    },
+    {
+      "name": "Sparkle Cleaning Pro",
+      "service": "Cleaning Services",
+      "price": "₦3,500",
+      "online": true,
+      "rating": "4.7",
+      "reviews": "76",
+      "distance": "1.8 km",
+      "image": "https://i.pravatar.cc/150?img=6",
+      "tag": "Top Rated",
+    },
+    {
+      "name": "Sparkle Cleaning Pro",
+      "service": "Cleaning Services",
+      "price": "₦3,500",
+      "online": true,
+      "rating": "4.7",
+      "reviews": "76",
+      "distance": "1.8 km",
+      "image": "https://i.pravatar.cc/150?img=6",
+      "tag": "Top Rated",
+    },
   ];
 }
 
 Future<List<Map<String, dynamic>>> getMostSearch() async {
   return [
    {"service":"plumbing"},
-   {"service":"plumbing"},
-   {"service":"plumbing"},
-   {"service":"plumbing"},
+   {"service":"cleaning"},
+   {"service":"laundry"},
+   {"service":"cooking"},
   ];
 }

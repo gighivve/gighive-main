@@ -413,7 +413,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          Switch(value: value, activeColor: indigo, onChanged: onChanged),
+          Switch(value: value, activeThumbColor: indigo, onChanged: onChanged),
         ],
       ),
     );

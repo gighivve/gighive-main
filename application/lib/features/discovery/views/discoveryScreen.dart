@@ -1,8 +1,8 @@
 import 'package:application/core/color.dart';
 import 'package:application/core/widgets/FetchingUI.dart';
+import 'package:application/core/widgets/sectionTitle.dart';
 import 'package:application/features/discovery/services/service_api_data.dart';
-
-import 'package:application/features/discovery/widgets/gig_card.dart';
+import 'package:application/features/discovery/widgets/professional_card.dart';
 import 'package:flutter/material.dart';
 
 class GigsPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _GigsPageState extends State<GigsPage> {
     return Scaffold(
       backgroundColor: AppColor.background,
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,15 +39,15 @@ class _GigsPageState extends State<GigsPage> {
                             color: AppColor.primaryText.withOpacity(0.54),
                           ),
                         ),
-                        const SizedBox(height: 1),
+
                         const Text(
                           "services near you",
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 1),
+
                         Text(
                           "Discover skilled professionals for any job.",
                           style: TextStyle(
@@ -115,6 +115,7 @@ class _GigsPageState extends State<GigsPage> {
                         controller: _searchController,
                         decoration: const InputDecoration(
                           hintText: "What service are you looking for?",
+                          hintStyle: TextStyle(fontSize: 14),
                           border: InputBorder.none,
                         ),
                       ),
@@ -142,11 +143,8 @@ class _GigsPageState extends State<GigsPage> {
               /// ================= POPULAR =================
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Text(
-                    "Popular Services",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                children: [
+                  sectionTitle("Popular Services"),
                   Text("View all", style: TextStyle(color: AppColor.accent)),
                 ],
               ),
@@ -169,9 +167,11 @@ class _GigsPageState extends State<GigsPage> {
                           padding: EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(
                             color: const Color.fromARGB(94, 225, 224, 224),
-                            borderRadius: BorderRadius.circular(8)
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: Center(child: Text(name)),
+                          child: Center(
+                            child: Text(name, style: TextStyle(fontSize: 14)),
+                          ),
                         );
                       }).toList(),
                     );
@@ -185,10 +185,7 @@ class _GigsPageState extends State<GigsPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Top Picks Near You",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  sectionTitle("Top Picks Near You"),
                   Text(
                     "Within 5 km",
                     style: TextStyle(
@@ -199,56 +196,63 @@ class _GigsPageState extends State<GigsPage> {
               ),
 
               const SizedBox(height: 14),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      FutureBuilder<List<dynamic>>(
+                        future: gigsData(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return FetchUI(snaphot: "loading");
+                          }
+                          if (snapshot.hasError) {
+                            return FetchUI(snaphot: "error");
+                          }
+                          final data = snapshot.data!;
+                          return Column(
+                            children: data.map((gig) {
+                              return ProfessionalCard(gig: gig);
+                            }).toList(),
+                          );
+                        },
+                      ),
 
-              Column(
-                children: [
-                  FutureBuilder<List<dynamic>>(
-                    future: gigsData(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) return FetchUI(snaphot: "loading");
-                      if (snapshot.hasError) return FetchUI(snaphot: "error");
-                      final data = snapshot.data!;
-                      return Column(
-                        children: data.map((gig) {
-                          return GigCard(gig: gig);
-                        }).toList(),
-                      );
-                    },
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF6366F1), AppColor.accent],
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.shield, color: Colors.white),
+                            const SizedBox(width: 10),
+                            const Expanded(
+                              child: Text(
+                                "You're in safe hands. All professionals are verified.",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {},
+                              child: const Text(
+                                "Learn More",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
 
-              const SizedBox(height: 20),
 
               /// ================= SAFETY CARD =================
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF6366F1), AppColor.accent],
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.shield, color: Colors.white),
-                    const SizedBox(width: 10),
-                    const Expanded(
-                      child: Text(
-                        "You're in safe hands. All professionals are verified.",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "Learn More",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
@@ -256,4 +260,3 @@ class _GigsPageState extends State<GigsPage> {
     );
   }
 }
-

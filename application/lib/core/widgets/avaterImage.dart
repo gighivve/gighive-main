@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:application/core/color.dart';
 import 'package:flutter/material.dart';
 

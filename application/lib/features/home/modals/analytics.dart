@@ -1,3 +1,4 @@
+import 'package:application/core/color.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -5,10 +6,10 @@ class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
 
   @override
-  State<AnalyticsScreen> createState() => AnalyticsScreenState();
+  State<AnalyticsScreen> createState() => _AnalyticsScreenState();
 }
 
-class AnalyticsScreenState extends State<AnalyticsScreen> {
+class _AnalyticsScreenState extends State<AnalyticsScreen> {
   String selected = "Weekly";
 
   final Map<String, List<double>> earningsData = {
@@ -19,123 +20,254 @@ class AnalyticsScreenState extends State<AnalyticsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 15,
-            color: Colors.black.withOpacity(0.05),
-            offset: const Offset(0, 6),
+    return Scaffold(
+      backgroundColor: AppColor.background,
+
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Analytics",
+          style: TextStyle(
+            color: AppColor.primary,
+            fontWeight: FontWeight.w700,
           ),
-        ],
+        ),
+        iconTheme: const IconThemeData(color: AppColor.primary),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
 
-          /// ================= EARNINGS CARD =================
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Earnings Overview",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              /// ================= KPI ROW 1 =================
+              Row(
+                children: [
+                  Expanded(child: _kpi("Earnings", "₦120,450", Icons.trending_up)),
+                  const SizedBox(width: 10),
+                  Expanded(child: _kpi("Jobs", "48", Icons.work_outline)),
+                ],
+              ),
+
+              const SizedBox(height: 10),
+
+              /// ================= KPI ROW 2 =================
+              Row(
+                children: [
+                  Expanded(child: _kpi("Completed", "42", Icons.check_circle_outline)),
+                  const SizedBox(width: 10),
+                  Expanded(child: _kpi("Rating", "4.8", Icons.star_outline)),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+
+              /// ================= EARNINGS CHART =================
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColor.surface,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: Colors.grey.shade200),
                 ),
-
-                const SizedBox(height: 8),
-
-                SizedBox(
-                  height: 120, // 🔥 smaller for mobile
-                  child: BarChart(
-                    BarChartData(
-                      borderData: FlBorderData(show: false),
-                      gridData: FlGridData(
-                        show: true,
-                        drawVerticalLine: false,
-                        horizontalInterval: 50,
-                        getDrawingHorizontalLine: (value) =>
-                            FlLine(color: Colors.grey.shade200, strokeWidth: 1),
-                      ),
-                      titlesData: FlTitlesData(show: false),
-                      barGroups: _buildBars(),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 14),
-
-          /// ================= GIG CARD =================
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade50,
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Gig Performance",
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
-                ),
-
-                const SizedBox(height: 10),
-
-                Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// PIE CHART (SMALLER)
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: 140, // 🔥 reduced size
-                        child: PieChart(
-                          PieChartData(
-                            centerSpaceRadius: 35,
-                            sectionsSpace: 2,
-                            sections: _buildPie(),
-                          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Earnings Overview",
+                          style: TextStyle(fontWeight: FontWeight.w700),
                         ),
-                      ),
+
+                        DropdownButton<String>(
+                          value: selected,
+                          underline: const SizedBox(),
+                          items: earningsData.keys.map((e) {
+                            return DropdownMenuItem(
+                              value: e,
+                              child: Text(e),
+                            );
+                          }).toList(),
+                          onChanged: (v) {
+                            if (v == null) return;
+                            setState(() => selected = v);
+                          },
+                        ),
+                      ],
                     ),
 
-                    const SizedBox(width: 8),
+                    const SizedBox(height: 10),
 
-                    /// LEGEND (compact)
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _Legend(color: Colors.green, text: "Completed"),
-                          _Legend(color: Colors.orange, text: "Pending"),
-                          _Legend(color: Colors.red, text: "Cancelled"),
-                          _Legend(color: Colors.blue, text: "Progress"),
-                        ],
+                    SizedBox(
+                      height: 180,
+                      child: BarChart(
+                        BarChartData(
+                          borderData: FlBorderData(show: false),
+
+                          gridData: FlGridData(
+                            show: true,
+                            drawVerticalLine: false,
+                            horizontalInterval: 50,
+                            getDrawingHorizontalLine: (value) =>
+                                FlLine(color: Colors.grey.shade200, strokeWidth: 1),
+                          ),
+
+                          titlesData: const FlTitlesData(
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                          ),
+
+                          barGroups: _bars(),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+
+              const SizedBox(height: 20),
+
+              /// ================= GIG PERFORMANCE =================
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColor.surface,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    const Text(
+                      "Gig Performance",
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+                        /// PIE CHART
+                        Expanded(
+                          child: SizedBox(
+                            height: 180,
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: PieChart(
+                                PieChartData(
+                                  centerSpaceRadius: 40,
+                                  sectionsSpace: 2,
+                                  sections: _pie(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(width: 10),
+
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _Legend(color: Colors.green, text: "Completed"),
+                              _Legend(color: Colors.orange, text: "Pending"),
+                              _Legend(color: Colors.red, text: "Cancelled"),
+                              _Legend(color: Colors.blue, text: "In Progress"),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              /// ================= INSIGHTS =================
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: AppColor.surface,
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: Colors.grey.shade200),
+                ),
+                child: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Insights",
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    SizedBox(height: 10),
+                    Text("• Earnings increased by 18% this week"),
+                    SizedBox(height: 6),
+                    Text("• Most jobs come from repeat clients"),
+                    SizedBox(height: 6),
+                    Text("• Peak time: 10AM - 2PM"),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 30),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// ================= KPI =================
+  Widget _kpi(String title, String value, IconData icon) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColor.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: AppColor.accent, size: 20),
+          const SizedBox(height: 10),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            title,
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
           ),
         ],
       ),
     );
   }
 
-  /// ================= BAR DATA (THICKER CANDLES) =================
-  List<BarChartGroupData> _buildBars() {
+  /// ================= BAR DATA =================
+  List<BarChartGroupData> _bars() {
     final values = earningsData[selected]!;
 
     return List.generate(values.length, (i) {
@@ -144,9 +276,9 @@ class AnalyticsScreenState extends State<AnalyticsScreen> {
         barRods: [
           BarChartRodData(
             toY: values[i],
-            width: 38, // 🔥 BIGGER CANDLE WIDTH
+            width: 20,
             borderRadius: BorderRadius.circular(6),
-            color: Colors.deepOrange,
+            color: AppColor.accent,
           ),
         ],
       );
@@ -154,12 +286,12 @@ class AnalyticsScreenState extends State<AnalyticsScreen> {
   }
 
   /// ================= PIE DATA =================
-  List<PieChartSectionData> _buildPie() {
+  List<PieChartSectionData> _pie() {
     return [
-      PieChartSectionData(value: 40, color: Colors.green, radius: 40),
-      PieChartSectionData(value: 25, color: Colors.orange, radius: 40),
-      PieChartSectionData(value: 20, color: Colors.red, radius: 40),
-      PieChartSectionData(value: 15, color: Colors.blue, radius: 40),
+      PieChartSectionData(value: 40, color: Colors.green, radius: 45),
+      PieChartSectionData(value: 25, color: Colors.orange, radius: 45),
+      PieChartSectionData(value: 20, color: Colors.red, radius: 45),
+      PieChartSectionData(value: 15, color: Colors.blue, radius: 45),
     ];
   }
 }
@@ -180,7 +312,10 @@ class _Legend extends StatelessWidget {
           Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
           ),
           const SizedBox(width: 6),
           Text(text, style: const TextStyle(fontSize: 12)),

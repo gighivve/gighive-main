@@ -1,4 +1,5 @@
 import 'package:application/core/color.dart';
+import 'package:application/features/home/modals/transaction_details.dart';
 import 'package:flutter/material.dart';
 
 class TransactionCard extends StatelessWidget {
@@ -16,9 +17,7 @@ class TransactionCard extends StatelessWidget {
     final String date = txn['date'];
     final String client = txn['client'];
     final String category = txn['category'];
-
     final bool isIncome = type == "income";
-
     final Color statusColor = _getStatusColor(status);
     final IconData icon = _getCategoryIcon(category);
 
@@ -26,7 +25,11 @@ class TransactionCard extends StatelessWidget {
       onTap: () => showGeneralDialog(
         context: context,
         pageBuilder: (context, _, _) {
-          return Scaffold(body: Center(child: Text("data")));
+          return TransactionDetails(
+            amount: amount,
+            status: status.toLowerCase(),
+            colors: _getStatusColor(status),
+          );
         },
       ),
       child: Container(
@@ -168,7 +171,7 @@ class TransactionCard extends StatelessWidget {
 
   Color _getStatusColor(String status) {
     switch (status) {
-      case "Completed":
+      case "successful":
         return const Color(0xFF22C55E);
       case "Pending":
         return const Color(0xFFF59E0B);

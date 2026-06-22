@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent
-    ));
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,
+    ),
+  );
   removeLoadingIndicator();
   runApp(const MyApp());
 }
@@ -60,9 +64,7 @@ class _MyAppState extends State<MyApp> {
       // 👇 SWITCH CONTROL
       themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
 
-      home: SafeArea(
-        child: Layout(isDark: isDark, toggleTheme: toggleTheme),
-      ),
+      home: Layout(isDark: isDark, toggleTheme: toggleTheme),
     );
   }
 }

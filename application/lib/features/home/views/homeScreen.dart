@@ -30,6 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor:Color(0xFFC3C3C4),
+        elevation: 0,
+        toolbarHeight: -15,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -50,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         top: 18,
                       ),
                       decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 195, 195, 196),
+                        color: Color(0xFFC3C3C4),
                       ),
                       child: const SafeArea(bottom: false, child: HomeHeader()),
                     ),
